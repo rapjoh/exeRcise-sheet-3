@@ -1,7 +1,7 @@
 ---
-title: "Exercise #X"
+title: "Exercise #3"
 subtitle: "Fortgeschrittene Statistische Software für NF"
-author: "Name (Martrikelnummer), Name (Martrikelnummer), ..."
+author: "Raphael John (12548296), Fabian Walthes (12564674)"
 date: "`r Sys.Date()`"
 output: distill::distill_article
 ---
@@ -44,6 +44,16 @@ c)  For all of the following tasks in this exercise sheet we ask you to
 
 d)  Name 2 strengths and 2 weaknesses of git. (Don't forget to create a
     commit after this answer, see *1c*)
+    
+    Strengths:
+    - git protects you from loosing files
+    - collaboration and working together is very easy with git
+    
+    Weaknesses:
+    - Especially in the beginning it can be very complicated to use
+    - git dosen't work automatically, you have to explicitly use it
+    
+    
 e)  Knit this exercise sheet. Some new files will automatically be
     generated when knitting the sheet e.g. the HTML page. Ignore these
     files, as we only want to track the source files themselves.
