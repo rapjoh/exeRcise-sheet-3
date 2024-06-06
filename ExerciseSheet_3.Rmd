@@ -4,6 +4,9 @@ subtitle: "Fortgeschrittene Statistische Software für NF"
 author: "Raphael John (12548296), Fabian Walthes (12564674)"
 date: "`r Sys.Date()`"
 output: distill::distill_article
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ## General Remarks
@@ -44,16 +47,17 @@ c)  For all of the following tasks in this exercise sheet we ask you to
 
 d)  Name 2 strengths and 2 weaknesses of git. (Don't forget to create a
     commit after this answer, see *1c*)
-    
+
     Strengths:
-    - git protects you from loosing files
-    - collaboration and working together is very easy with git
-    
+
+    -   git protects you from loosing files
+    -   collaboration and working together is very easy with git
+
     Weaknesses:
-    - Especially in the beginning it can be very complicated to use
-    - git dosen't work automatically, you have to explicitly use it
-    
-    
+
+    -   Especially in the beginning it can be very complicated to use
+    -   git dosen't work automatically, you have to explicitly use it
+
 e)  Knit this exercise sheet. Some new files will automatically be
     generated when knitting the sheet e.g. the HTML page. Ignore these
     files, as we only want to track the source files themselves.
@@ -84,7 +88,6 @@ library(readxl)
 
 ```
 
-
 Link: <https://opendata.muenchen.de/dataset/vornamen-von-neugeborenen>
 
 a)  Download the data for both years and track it in git. For small
@@ -95,6 +98,7 @@ b)  Load the data for both years into R. Check the type of the count
     not numeric? Fix the problem in an appropriate manner, it is OK if
     some of the counts are inaccurate because of this. Explain your
     solution and the repercussions.
+
 ```{r}
 Jahr2022 <- read.csv("open_data_portal_2022.csv")
 class("Anzahl")
@@ -112,19 +116,21 @@ class(Jahr2022$Anzahl)
 class(Jahr2023$Anzahl)
 ```
 
-Da es die Option "4 oder weniger" gibt. Es gibt 4390 Namen von denen über 4000 
-diese Bezeichnung für die Anzahl haben. Da wir nicht wissen, wie die
-Verteilung aussieht, würde ich jedem dieser Namen die Anuahl 2 geben, 
-da dies in der Mitte von 0,1,2,3,4 liegt. 
+Since there is an option of “4 oder weniger”. There are 4390 names of
+which over 4000 have this number designation, as the names were given
+less than 4 times. Since we don't know what the distribution looks like,
+I would give each of these names the number 2 since that is in the
+middle of 0,1,2,3,4.
 
 c)  Calculate the total number of babies born in Munich in 2022
     and 2023. Which year had the bigger baby-boom?
+
 ```{r}
 sum(Jahr2022$Anzahl)
 sum(Jahr2023$Anzahl)
 ```
-In 2022 there was a bigger baby-boom.  
-    
+
+In 2022 there was a bigger baby-boom.
 
 d)  Add a new column `year` to both datasets which holds the correct
     year for each.
@@ -144,6 +150,7 @@ j <- bind_rows(Jahr2022, Jahr2023)
 f)  Combine the counts for same names to determine the most popular
     names across both years. Print out the top 10 names in a nicely
     formatted table for both years. Include a table caption.
+
 ```{r}
 aggregated_data <- j %>%
   group_by(Vorname) %>%
@@ -166,17 +173,18 @@ b)  Download the dataset and track it in git.
 c)  Put the name / title of the dataset and a link to it below.
 
 -   Dataset Name: Electricity mix from BP & EMBER
--   Link: <https://github.com/owid/owid-datasets/blob/master/datasets/Electricity%20mix%20from%20BP%20%26%20EMBER%20(2022)/Electricity%20mix%20from%20BP%20%26%20EMBER%20(2022).csv>
+-   Link:
+    [https://github.com/owid/owid-datasets/blob/master/datasets/Electricity%20mix%20from%20BP%20%26%20EMBER%20(2022)/Electricity%20mix%20from%20BP%20%26%20EMBER%20(2022).csv](https://github.com/owid/owid-datasets/blob/master/datasets/Electricity%20mix%20from%20BP%20%26%20EMBER%20(2022)/Electricity%20mix%20from%20BP%20%26%20EMBER%20(2022).csv){.uri}
 
 d)  Come up with a (research) question you want to answer with the data
     and briefly explain why you believe this is an interesting question
     within one sentence. It should be a question that can be answered
     with the dataset and using R.
-    
-How much faster or slower is Germany compared to France in in reducing their carbon
-intensity of electricity?
-It is an interesting question, because energy represents a major part of carbon
-emissions, and reducing the carbon intensity of electricity can have a big impact towards
+
+How much faster or slower is Germany compared to France in in reducing
+their carbon intensity of electricity? It is an interesting question,
+because energy represents a major part of carbon emissions, and reducing
+the carbon intensity of electricity can have a big impact towards
 achieving the climate goals.
 
 e)  Use R to answer your chosen question.
@@ -206,22 +214,20 @@ summary(model_g)
 summary(model_f)
 ```
 
-While France has a lower carbon intensity in total, the regression suggests, that
-the value is at a constant level.
-Germany has a higher carbon intensity overall, but with every year, the value is on
-average -5.9 g CO2/kWh lower.
+While France has a lower carbon intensity in total, the regression
+suggests, that the value is at a constant level. Germany has a higher
+carbon intensity overall, but with every year, the value is on average
+-5.9 g CO2/kWh lower.
 
-So now, Germany is worse at producing low carbon energy, but is making progress in reducing
-the carbon intensity.
-France has a better starting point, but it seems, that there is nearly no progress in 
-reducing the value further.
-
-
+So now, Germany is worse at producing low carbon energy, but is making
+progress in reducing the carbon intensity. France has a better starting
+point, but it seems, that there is nearly no progress in reducing the
+value further.
 
 f)  Create a meaningful plot / figure with the dataset. Make sure to
     provide a figure caption (via the chunk options / Rmarkdown) and
     correctly label the figure.
-    
+
 ```{r figure1, fig.align='left', fig.cap="Carbon intensity Germany and France"}
 ggplot(
   data = electricity_gf,
@@ -238,7 +244,6 @@ ggplot(
     color = "Country and linear regression"
 ) + geom_smooth(method = "lm", se = TRUE)
 ```
-
 
 ## Final Note
 
