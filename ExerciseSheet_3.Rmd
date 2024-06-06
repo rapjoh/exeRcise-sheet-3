@@ -78,6 +78,13 @@ Download the latest open datasets on given names ("Vornamen") from the
 open data repository of the city of Munich for the years `2023` and
 `2022`.
 
+```{r}
+library(tidyverse)
+library(readxl)
+
+```
+
+
 Link: <https://opendata.muenchen.de/dataset/vornamen-von-neugeborenen>
 
 a)  Download the data for both years and track it in git. For small
@@ -88,18 +95,62 @@ b)  Load the data for both years into R. Check the type of the count
     not numeric? Fix the problem in an appropriate manner, it is OK if
     some of the counts are inaccurate because of this. Explain your
     solution and the repercussions.
+```{r}
+Jahr2022 <- read.csv("open_data_portal_2022.csv")
+class("Anzahl")
+
+Jahr2023 <- read.csv("vornamen-muenchen-2023.csv")
+class("Anzahl") 
+
+Jahr2022$Anzahl[Jahr2022$Anzahl=="4 oder weniger"] <- "2"
+Jahr2023$Anzahl[Jahr2023$Anzahl=="4 oder weniger"] <- "2"
+
+Jahr2022$Anzahl <- as.numeric(Jahr2022$Anzahl)
+Jahr2023$Anzahl <- as.numeric(Jahr2023$Anzahl)
+
+class(Jahr2022$Anzahl)
+class(Jahr2023$Anzahl)
+```
+Da es die Option "4 oder weniger" gibt. Es gibt 4390 Namen von denen über 4000 
+diese Bezeichnung für die Anzahl haben. Da wir nicht wissen, wie die
+Verteilung aussieht, würde ich jedem dieser Namen die Anuahl 2 geben, 
+da dies in der Mitte von 0,1,2,3,4 liegt. 
 
 c)  Calculate the total number of babies born in Munich in 2022
     and 2023. Which year had the bigger baby-boom?
+```{r}
+sum(Jahr2022$Anzahl)
+sum(Jahr2023$Anzahl)
+```
+In 2022 there was a bigger baby-boom.  
+    
 
 d)  Add a new column `year` to both datasets which holds the correct
     year for each.
 
+```{r}
+Jahr2022$year <- 2022
+Jahr2023$year <- 2023
+```
+
 e)  Combine both datasets into one using `bind_rows()`.
+
+```{r}
+j <- bind_rows(Jahr2022, Jahr2023)
+
+```
 
 f)  Combine the counts for same names to determine the most popular
     names across both years. Print out the top 10 names in a nicely
     formatted table for both years. Include a table caption.
+```{r}
+aggregated_data <- j %>%
+  group_by(Vorname) %>%
+  summarise(Anzahl = sum(Anzahl)) %>%
+  arrange(desc(Anzahl))
+  
+knitr::kable(head(aggregated_data, n=10), caption = "Top 10 names in 2022 and 2023")
+```
 
 ## Exercise 4: Open Analysis (4 points)
 
