@@ -111,6 +111,7 @@ Jahr2023$Anzahl <- as.numeric(Jahr2023$Anzahl)
 class(Jahr2022$Anzahl)
 class(Jahr2023$Anzahl)
 ```
+
 Da es die Option "4 oder weniger" gibt. Es gibt 4390 Namen von denen über 4000 
 diese Bezeichnung für die Anzahl haben. Da wir nicht wissen, wie die
 Verteilung aussieht, würde ich jedem dieser Namen die Anuahl 2 geben, 
@@ -164,17 +165,80 @@ a)  Go to <https://github.com/owid/owid-datasets/tree/master/datasets>
 b)  Download the dataset and track it in git.
 c)  Put the name / title of the dataset and a link to it below.
 
--   Dataset Name: ...
--   Link: <https://github.com/owid/owid-datasets/>...
+-   Dataset Name: Electricity mix from BP & EMBER
+-   Link: <https://github.com/owid/owid-datasets/blob/master/datasets/Electricity%20mix%20from%20BP%20%26%20EMBER%20(2022)/Electricity%20mix%20from%20BP%20%26%20EMBER%20(2022).csv>
 
 d)  Come up with a (research) question you want to answer with the data
     and briefly explain why you believe this is an interesting question
     within one sentence. It should be a question that can be answered
     with the dataset and using R.
+    
+How much faster or slower is Germany compared to France in in reducing their carbon
+intensity of electricity?
+It is an interesting question, because energy represents a major part of carbon
+emissions, and reducing the carbon intensity of electricity can have a big impact towards
+achieving the climate goals.
+
 e)  Use R to answer your chosen question.
+
+```{r}
+electricity <- read.csv("Electricity_mix_from_BP_EMBER.csv")
+
+electricity_gf <- electricity %>% 
+  filter(Entity=="Germany" | Entity=="France") %>%
+  na.omit() %>%
+  janitor::clean_names()
+
+electricity_g <- electricity %>% 
+  filter(Entity=="Germany") %>%
+  na.omit() %>%
+  janitor::clean_names()
+
+electricity_f <- electricity %>% 
+  filter(Entity=="France") %>%
+  na.omit() %>%
+  janitor::clean_names()
+
+
+model_g <- lm(electricity_g$carbon_intensity_of_electricity_g_co2_k_wh ~ electricity_g$year)
+model_f <- lm(electricity_f$carbon_intensity_of_electricity_g_co2_k_wh ~ electricity_f$year)
+summary(model_g)
+summary(model_f)
+```
+
+While France has a lower carbon intensity in total, the regression suggests, that
+the value is at a constant level.
+Germany has a higher carbon intensity overall, but with every year, the value is on
+average -5.9 g CO2/kWh lower.
+
+So now, Germany is worse at producing low carbon energy, but is making progress in reducing
+the carbon intensity.
+France has a better starting point, but it seems, that there is nearly no progress in 
+reducing the value further.
+
+
+
 f)  Create a meaningful plot / figure with the dataset. Make sure to
     provide a figure caption (via the chunk options / Rmarkdown) and
     correctly label the figure.
+    
+```{r figure1, fig.align='left', fig.cap="Carbon intensity Germany and France"}
+ggplot(
+  data = electricity_gf,
+  mapping = aes(
+    x = year,
+    y = carbon_intensity_of_electricity_g_co2_k_wh,
+    color = entity
+  )
+) + geom_point() +
+  labs(
+    title = "Carbon intensity of electricity in Germany and France",
+    x = "Year",
+    y = "Carbon intensity of electricity in  g CO2/kWh",
+    color = "Country and linear regression"
+) + geom_smooth(method = "lm", se = TRUE)
+```
+
 
 ## Final Note
 
